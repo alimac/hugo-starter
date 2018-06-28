@@ -1,0 +1,7 @@
+themes/
+public/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup

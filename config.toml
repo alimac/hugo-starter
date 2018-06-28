@@ -1,0 +1,15 @@
+baseURL = ""
+languageCode = "en-us"
+title = ""
+theme = "ananke"
+
+# Put links to main sections in the menu bar
+SectionPagesMenu = "main"
+
+
+[params]
+  description = ""
+  twitter = ""
+
+[permalinks]
+  post = "/:slug/"
