@@ -1,0 +1,5 @@
+baseURL = "https://pleasework.alimac.io"
+languageCode = "en-us"
+title = "My New Hugo Site"
+
+theme="ananke"
