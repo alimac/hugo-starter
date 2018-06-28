@@ -1,7 +1,7 @@
 # Website hostname, used to set:
 # - Docker image and container names
 # - path to web root (in /tmp directory)
-WEBSITE=
+WEBSITE=starter.alimac.io
 
 ifndef WEBSITE
 $(error WEBSITE is not set)
