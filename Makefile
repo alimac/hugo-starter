@@ -21,8 +21,6 @@ build: ## Build new Docker image (if it's been a while, start here)
 	docker build -t $(WEBSITE) . \
 		--build-arg HUGO_VER=$(HUGO_VERSION) \
 		--build-arg WEB_DIR=/tmp/$(WEBSITE)
-	@# Update Hugo version in netlify.toml
-	perl -p -i -e "s/HUGO_VERSION.*/HUGO_VERSION = \"$(HUGO_VERSION)\"/g" netlify.toml
 
 serve: ## Serve Hugo website locally
 	@# Look up IDs of any running containers and dispose of them
