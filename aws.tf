@@ -40,6 +40,7 @@ resource "aws_route53_record" "subdomain" {
 
 # CloudFront distribution
 resource "aws_cloudfront_distribution" "subdomain" {
+  aliases             = ["${var.subdomain}.${var.zone}"]
   default_root_object = "index.html"
   enabled             = true
   price_class         = "PriceClass_100"

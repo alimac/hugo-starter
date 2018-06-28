@@ -7,6 +7,14 @@ ifndef WEBSITE
 $(error WEBSITE is not set)
 endif
 
+# S3 bucket name
+S3_BUCKET=$(WEBSITE)
+
+# Look up CloudFront distribution ID based on website alias
+DISTRIBUTION_ID=$(shell aws cloudfront list-distributions \
+	--query 'DistributionList.Items[].{id:Id,a:Aliases.Items}[?contains(a,`$(WEBSITE)`)].id' \
+	--output text)
+
 # Look up latest release of Hugo
 # https://github.com/gohugoio/hugo/releases/latest will automatically redirect
 # Get Location header, and extract the version number at the end of the URL
@@ -62,6 +70,18 @@ edit: ## Open website in a browser, open directory in VS Code
 clean: ## Stop and remove Docker container
 	-docker stop $(WEBSITE)
 	-docker rm $(WEBSITE)
+
+deploy: ## Deploy site to AWS
+	@# Delete .DS_Store files, they are the bane of existence
+	find . -name "*.DS_Store" -type f -delete
+	@# Remove existing public/ directory
+	rm -rf public/
+	@# Build site
+	docker run --rm -it --volume `pwd`:/tmp/$(WEBSITE) $(WEBSITE) hugo
+	@# Upload files to S3
+	aws s3 sync --acl "public-read" --sse "AES256" public/ s3://$(S3_BUCKET) --exclude 'post'
+	@# Invalidate caches
+	aws cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths '/*'
 
 delete-site: ## Delete the site to start over
 	-rm -rf archetypes themes data layouts content static
