@@ -42,6 +42,8 @@ new: ## Create new Hugo site
 	docker run --rm -it \
 		--volume `pwd`:/tmp/$(WEBSITE) $(WEBSITE) \
 		hugo new site . --force
+	@# Get ananke theme
+	git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
 	@# Set baseURL to our website
 	perl -p -i -e "s/baseURL.*/baseURL = \"https://$(WEBSITE)\"/g" config.toml
 
