@@ -77,4 +77,4 @@ clean-all: ## Remove any stopped containers and dangling images
 help: ## Show me what this Makefile can do!
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: build serve new random edit clean clean-all help
+.PHONY: build serve new-site delete-site random-post edit clean clean-all help
