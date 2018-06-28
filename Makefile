@@ -36,18 +36,22 @@ serve: ## Serve Hugo website locally
 		--name $(WEBSITE) \
 		$(WEBSITE)
 
-new: ## Create new Hugo site
+new-site: ## Create new Hugo site
 	@# Create a new Hugo site within current directory
 	@# --force needed because of existing Dockerfile and Makefile
 	docker run --rm -it \
 		--volume `pwd`:/tmp/$(WEBSITE) $(WEBSITE) \
 		hugo new site . --force
+	@# Set baseURL to our website
+	perl -p -i -e "s/baseURL.*/baseURL = \"https:\/\/$(WEBSITE)\"/g" config.toml
+	@# Check out theme
+	git submodule update
+
+theme:
 	@# Get ananke theme
 	git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
-	@# Set baseURL to our website
-	perl -p -i -e "s/baseURL.*/baseURL = \"https://$(WEBSITE)\"/g" config.toml
 
-random: ## Create a random post
+random-post: ## Create a random post
 	@# Create a random entry
 	docker run --rm -it \
 		--volume `pwd`:/tmp/$(WEBSITE) $(WEBSITE) \
@@ -60,6 +64,10 @@ edit: ## Open website in a browser, open directory in VS Code
 clean: ## Stop and remove Docker container
 	docker stop $(WEBSITE)
 	docker rm $(WEBSITE)
+
+delete-site: ## Delete the site to start over
+	rm -rf archetypes themes data layouts content static
+	rm config.toml
 
 clean-all: ## Remove any stopped containers and dangling images
 	@# Remove stopped containers
